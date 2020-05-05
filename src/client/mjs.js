@@ -41,12 +41,14 @@ export const onLogin = writable(false);
 export function onLogout(){
     onUserName.set("Guest");
     userData = {};
+    /*
     sea={
         epriv:"",
         eqpub:"",
         priv:"",
         pub:"",
     }
+    */
     onPub.set("");
     onLogin.set(false);
 }

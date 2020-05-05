@@ -16,6 +16,6 @@ npm run build
 ```
 
 # Features:
+ * Forgot passphrase
  * Simple chat
  * Private Message
- * 

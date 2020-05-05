@@ -5,8 +5,14 @@
 
     import LoginComponent from "./component/access/account/LoginComponent.svelte";
     import ForgotComponent from "./component/access/account/ForgotComponent.svelte";
+    import LogoutComponent from "./component/access/account/LogoutComponent.svelte";
 
     import AccountComponent from "./component/access/account/AccountComponent.svelte";
+
+    import MessagesComponent from "./component/access/messages/MessagesComponent.svelte";
+    import ChatComponent from "./component/access/chat/ChatComponent.svelte";
+    import PublicComponent from "./component/access/chat/PublicChatComponent.svelte";
+    import ForumComponent from "./component/access/forum/ForumComponent.svelte";
 
 
     let idcomponent = "main-" + generateId();
@@ -31,9 +37,9 @@
         //navmenus.push({name:"Test Area",context:"testarea",comp:TestAreaComponent});
         navmenus.push({name:"Account",context:"account",comp:AccountComponent});
 
-        navmenus.push({name:"Messages",context:"context",comp:null});
-        navmenus.push({name:"Chat",context:"chat",comp:null});
-        navmenus.push({name:"Forum",context:"forum",comp:null});
+        navmenus.push({name:"Messages",context:"context",comp:MessagesComponent});
+        navmenus.push({name:"Public Chat",context:"publicchat",comp:PublicComponent});
+        navmenus.push({name:"Forum",context:"forum",comp:ForumComponent});
 
         //navmenus.push({name:"Profile",context:"profile",comp:ProfileComponent});
         //navmenus.push({name:"Messages",context:"messages",comp:MessagesComponent});
@@ -42,8 +48,8 @@
         //navmenus.push({name:"Forum",context:"forum",comp:ForumComponent});
         //navmenus.push({name:"Database",context:"database",comp:DatabaseComponent});
         //navmenus.push({name:"Admin",context:"admin",comp:AdminComponent});
-        //navmenus.push({name:"Logout",context:"logout",comp:LogoutComponent});
-        navmenus.push({name:"Logout",context:"logout",comp:null});
+        navmenus.push({name:"Logout",context:"logout",comp:LogoutComponent});
+        //navmenus.push({name:"Logout",context:"logout",comp:null});
         navmenus=navmenus;
     }
 
