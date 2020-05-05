@@ -1,3 +1,8 @@
+data
+public
+package-lock.json
+
+
 # Logs
 logs
 *.log
