@@ -11,18 +11,19 @@
     //loginid="beta",password="beta";
     let showModal = false;
     let message = "";
+
+    let users = [];
+    let selectuser;
     
     onMount(async () => {
-        //console.log("mount")
-        //console.log("access?");
+        //console.log("mount");
+        users.push({id:0,name:"beta",password:"test"});
+        users.push({id:1,name:"alpha",password:"test"});
+        users.push({id:2,name:"test",password:"test"});
+        users=users;
     });
 
-    //afterUpdate(() => {
-        //console.log("afterUpdate")
-    //});
-
     onDestroy(() => {
-       //console.log("onDestroy")
        password="";
        message="";
     });
@@ -57,7 +58,6 @@
                 onLogin.set(true);
             }
         });
-        
     }
 
     function btnregister(e){
@@ -89,12 +89,24 @@
     function clickForgot(e){
         dispatch("hevent",{action:"forgot"});
     }
+
+    function SelectUser(){
+        console.log(selectuser);
+        loginid = users[selectuser].name;
+        password = users[selectuser].password;
+    }
 </script>
 
 <style>
 
 </style>
 <div id="{idcomponent}">
+    <select bind:value={selectuser} on:change={SelectUser}>
+        <option selected disabled> - Select User - </option>
+        {#each users as item}
+            <option value={item.id}> {item.name} </option>
+        {/each}
+    </select>
     <table>
         <tr>
             <td>Alias:</td>

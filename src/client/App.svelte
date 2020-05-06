@@ -12,6 +12,7 @@
     import MessagesComponent from "./component/access/messages/MessagesComponent.svelte";
     import ChatComponent from "./component/access/chat/ChatComponent.svelte";
     import PublicComponent from "./component/access/chat/PublicChatComponent.svelte";
+    import PrivateChatComponent from "./component/access/chat/PrivateChatComponent.svelte";
     import ForumComponent from "./component/access/forum/ForumComponent.svelte";
 
 
@@ -36,16 +37,12 @@
         navmenus.push({name:"Home",context:"home",comp:null});
         //navmenus.push({name:"Test Area",context:"testarea",comp:TestAreaComponent});
         navmenus.push({name:"Account",context:"account",comp:AccountComponent});
-
+        //navmenus.push({name:"Contacts",context:"contacts",comp:ContactsComponent});
         navmenus.push({name:"Messages",context:"context",comp:MessagesComponent});
         navmenus.push({name:"Public Chat",context:"publicchat",comp:PublicComponent});
+        navmenus.push({name:"Private Chat",context:"privatechat",comp:PrivateChatComponent});
         navmenus.push({name:"Forum",context:"forum",comp:ForumComponent});
 
-        //navmenus.push({name:"Profile",context:"profile",comp:ProfileComponent});
-        //navmenus.push({name:"Messages",context:"messages",comp:MessagesComponent});
-        //navmenus.push({name:"Contacts",context:"contacts",comp:ContactsComponent});
-        //navmenus.push({name:"Chat",context:"chat",comp:ChatComponent});
-        //navmenus.push({name:"Forum",context:"forum",comp:ForumComponent});
         //navmenus.push({name:"Database",context:"database",comp:DatabaseComponent});
         //navmenus.push({name:"Admin",context:"admin",comp:AdminComponent});
         navmenus.push({name:"Logout",context:"logout",comp:LogoutComponent});
@@ -129,29 +126,28 @@
 </style>
 
 <div id="{idcomponent}" class="mainbody">
-    
-    {#if blogin}
-        
+
         <div id="{idnav}" class="access_navmenu">
-            {#each navmenus as menu}
-                <a href="/#" on:click="{()=>h_context(menu.comp)}">{menu.name} </a>
-            {/each}
+            {#if blogin}
+                {#each navmenus as menu}
+                    <a href="/#" on:click="{()=>h_context(menu.comp)}">{menu.name} </a>
+                {/each}
+            {/if}
         </div>
         
-        {#if accessview !=null}
-            <div id="{idcontent}" class="">
-                <svelte:component this={accessview} on:hevent={hevent}/>
-            </div>
-        {/if}
-
-
-    {:else}
-        {#if bforgot}
-            <ForgotComponent on:hevent={h_event}></ForgotComponent>
-        {:else}
-            Access
-            <LoginComponent on:hevent={h_event}></LoginComponent>
-        {/if}
-    {/if}
+        <div id="{idcontent}" class="">
+            {#if blogin}
+                {#if accessview !=null}
+                    <svelte:component this={accessview} on:hevent={hevent}/>
+                {/if}
+            {:else}
+                {#if bforgot}
+                    <ForgotComponent on:hevent={h_event}></ForgotComponent>
+                {:else}
+                    Access
+                    <LoginComponent on:hevent={h_event}></LoginComponent>
+                {/if}
+            {/if}
+        </div>
 
 </div>

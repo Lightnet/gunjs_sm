@@ -18,6 +18,7 @@
     let elcontent;
 
     let chatmessage = "test";
+    let chatmessages = [];
     let gunchat;
 
     onMount(() => {
@@ -66,14 +67,20 @@
         console.log("Init Chat...")
         //$('#publicchatlist').empty();
         //document.getElementById('publicchatlist').innerHTML = "";
-        let publicchatlist = document.getElementById('publicchatlist');
-        publicchatlist.innerHTML = "";
+        //let publicchatlist = document.getElementById('publicchatlist');
+        //publicchatlist.innerHTML = "";
+        chatmessages=[];
 
         let encmsg = await SEA.work("public","chat"); //encrypttion key default?
         async function qcallback(data,key){
-            //console.log('incoming messages...');
-            //console.log("key",key);
-            //console.log("data",data);
+            console.log('incoming messages...');
+            console.log("key",key);
+            console.log("data",data);
+
+            //gun.get('chat').get(key).once((_data,_key)=>{
+                //console.log(_data);
+            //});
+
             if(data == null)return;
             if(data.message != null){
                 let message = window.atob(data.message);
@@ -81,11 +88,13 @@
                 let dec = await SEA.decrypt(message,encmsg);
                 //console.log(dec)
                 if(dec!=null){
-                    var div = document.createElement("div");
-                    div.setAttribute("id",key);
-                    //div.setAttribute("text", data.alias + ": " + dec);
-                    div.innerHTML = data.alias + ": " + dec;
-                    publicchatlist.appendChild(div);
+                    chatmessages.push({id:key, text: data.alias + ": " + dec });
+                    chatmessages=chatmessages;
+                    //var div = document.createElement("div");
+                    //div.setAttribute("id",key);
+                    ////div.setAttribute("text", data.alias + ": " + dec);
+                    //div.innerHTML = data.alias + ": " + dec;
+                    //publicchatlist.appendChild(div);
                     /*
                     $('#publicchatlist').append($('<div/>', { 
                         id: key,
@@ -109,6 +118,10 @@
         //gunchat.get({'.': {'*': '2019/08/'}}).map().once(qcallback);
         //gunchat.get({'.': {'*': timestring}}).map().once(qcallback);
         gunchat.get({'.': {'*': timestring},'%': 50000}).map().once(qcallback);
+        //gunchat.get({'.': {'*': timestring},'%': 50000}).map().on(qcallback);
+        //gunchat.map().on(qcallback);
+        //gunchat.map().once(qcallback);
+        //gunchat.on(qcallback);
     }
 
     async function getchatmessage(){
@@ -128,6 +141,11 @@
         //console.log(who);
         //console.log(typeof enc)
         enc = window.btoa(enc);
+        
+        //gun.get('chat').set({
+            //alias:who,
+            //message:enc
+        //});
         gun.get('chat').get(timestamp()).put({
             alias:who,
             message:enc
@@ -179,10 +197,13 @@
 
 <div id={idcomponent} >
     <div id={idnav}>
-        <label> Chat </label>
+        <label>Public Chat:</label>
     </div>
     <div id={idcontent}>
         <div id="publicchatlist" class="messagetexts">
+            {#each chatmessages as item}
+                <div id={item.id}> {item.text} </div>
+            {/each}
         </div>
         <div class="messageinput">
             <input on:keydown={handleKeydown} bind:value={chatmessage} placeholder="enter chat entere"> 

@@ -1,6 +1,14 @@
 <script>
     import { onMount, onDestroy } from 'svelte';
-    import { gun, onUserName } from '../../../mjs.js';
+    import { gun } from '../../../mjs.js';
+    import { generateId } from '../../../generateid';
+
+    let idcomponent = "main-" + generateId();
+    let elcomponent;
+    let idnav = "nav-" + generateId();
+    let elnav;
+    let idcontent = "content-" + generateId();
+    let elcontent;
 
     let messages=[];
     let contacts=[];
@@ -14,14 +22,20 @@
     let statussearch="Normal";
     let chatboxheight=134;
     let chatmessageheight=136;
-
-    //const onUserNameUnsubscribe = onUserName.subscribe(value => {
-		//console.log(value);
-		//username = value;
-    //});
     
     onMount(()=>{
+        elcomponent = document.getElementById(idcomponent);
+        elnav = document.getElementById(idnav);
+        elcontent = document.getElementById(idcontent);
+
         UpdateContactList();
+        window.addEventListener('resize', handle_auto_resize);
+        window.dispatchEvent(new Event('resize'));
+
+        setTimeout(()=>{
+            window.dispatchEvent(new Event('resize'));
+            window.dispatchEvent(new Event('resize'));
+        },500);
     })
 
     onDestroy(()=>{
@@ -32,6 +46,7 @@
         publickey=null;
         messagesubject=null;
         messagecontent=null;
+        window.removeEventListener('resize', handle_auto_resize);
     });
 
     function togglecontact(){
@@ -41,6 +56,7 @@
             bdisplaycontact = true;
         }
     }
+
     async function sendprivatemessage(){
         let user = gun.user();
         //let gun = this.$gun;
@@ -102,6 +118,7 @@
         });
         console.log("end messages");
     }
+
     async function UI(say, id, alias){
         //console.log("test????");
         say = await Gun.SEA.decrypt(say, UI.dec);
@@ -110,7 +127,7 @@
         //console.log(say);
         //console.log(id);
         messages.push({id:id,alias:alias,message:say});
-        messages =messages;
+        messages = messages;
         let element = document.getElementById("messagebox");
         element.scrollTop = element.scrollHeight;
     }
@@ -200,15 +217,35 @@
         console.log("checking message...");
         viewprivatemessages();
     }
+
+    function handle_auto_resize(event){
+        let parent = elcomponent.parentNode;
+        elcomponent.style.height = parent.clientHeight + 'px';
+        elcomponent.style.width = parent.clientWidth + 'px';
+        if(elnav == null){
+            elnav = document.getElementById(idnav);
+            return;
+        }
+        elnav.style.height = (24) + 'px';
+        elnav.style.width = parent.clientWidth + 'px';
+        //console.log(parent.clientHeight, parent.clientWidth);
+
+        if(elcontent == null){
+            elcontent = document.getElementById(idcontent);
+            return;
+        }
+        elcontent.style.height = (parent.clientHeight - 100) + 'px';
+        elcontent.style.width = parent.clientWidth + 'px';
+    }
     //on:keyup={sendprivatemessage}
 </script>
 
 <style>
     .chatmessage{
-        position: fixed;
+        /*position: fixed;*/
         width:100%;
-        height:200px;
-        top:250px;
+        /*height:200px;*/
+        /*top:250px;*/
     }
 
     .chatbox{
@@ -218,50 +255,47 @@
 
 </style>
 
-<div id="chatmessagebox" class="chatmessage">
-    <div id="messagebox" class="chatbox" style="background-color:#aaa;overflow-y: scroll;">
-        Message(s):
-        {#each messages as item}
-            <div>
-                { item.alias } | > | { item.message }
-            </div>
-        {/each}
-    </div>
-    <div class="col" style="width:100px; background-color:#bbb;"></div>
-</div>
-<div style="height:70px;width:100%;background-color:gray;padding: 4px;">
-    <button on:click={togglecontact}>Contact</button>
-        {#if bdisplaycontact == true}
-            <select type="text" bind:value={selectitem} on:change={selectcontact}>
-                <option selected="true"> None </option>
-                {#each contacts as item}
-                    <option value={item.pub}> {item.alias}</option>
-                {/each}
-                <!--<option v-for="item in contacts" :key="item.id" v-bind:value="item.pub"> {item.alias}}</option>-->
-            </select>
-            Public Key:
-            <input type="text" bind:value={publickey} on:keyup={checkalias}>
-            <button on:click={addcontact}>Add</button>
-            <button on:click={removecontact}>Remove</button>
-        {/if}
-    <label>Status:{statussearch}</label>
+<div id="{idcomponent}">
 
-    <table>
-        <tr>
-            <td>
-                Content:
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <textarea bind:value={messagecontent}  /> 
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <button on:click={sendprivatemessage}>Send</button>
-            </td>
-        </tr>
-    </table>
-    
+    <div id="{idnav}" style="height:24px;width:100%;background-color:gray;padding: 4px;">
+        <button on:click={togglecontact}>Contact</button>
+            {#if bdisplaycontact == true}
+                <select type="text" bind:value={selectitem} on:change={selectcontact}>
+                    <option selected="true"> None </option>
+                    {#each contacts as item}
+                        <option value={item.pub}> {item.alias}</option>
+                    {/each}
+                    <!--<option v-for="item in contacts" :key="item.id" v-bind:value="item.pub"> {item.alias}}</option>-->
+                </select>
+                Public Key:
+                <input type="text" bind:value={publickey} on:keyup={checkalias}>
+                <button on:click={addcontact}>Add</button>
+                <button on:click={removecontact}>Remove</button>
+            {/if}
+        <label>Status:{statussearch}</label>
+    </div>
+
+
+    <div id={idcontent} class="chatmessage">
+        <div id="messagebox" class="chatbox" style="background-color:#aaa;overflow-y: scroll;">
+            Message(s):
+            {#each messages as item}
+                <div>
+                    { item.alias } | > | { item.message }
+                </div>
+            {/each}
+        </div>
+        <div style="width:100%; background-color:#bbb;">
+            <table>
+                <tr>
+                    <td>
+                        <textarea bind:value={messagecontent}  /> 
+                    </td>
+                    <td>
+                        <button on:click={sendprivatemessage}>Send</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
 </div>
