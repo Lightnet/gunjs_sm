@@ -59,41 +59,17 @@
     //https://gun.eco/docs/RAD
     async function InitChat(){
         console.log("Init Chat...")
-        //$('#publicchatlist').empty();
-        //document.getElementById('publicchatlist').innerHTML = "";
-        //let publicchatlist = document.getElementById('publicchatlist');
-        //publicchatlist.innerHTML = "";
         chatmessages=[];
-
-        let encmsg = await SEA.work("public","chat"); //encrypttion key default?
         async function qcallback(data,key){
             console.log('incoming messages...');
             console.log("key:",key);
             console.log("data >> ",data);
-            //gun.get('chat').get(key).once((_data,_key)=>{
-                //console.log(_data);
-            //});
-
             if(data == null)return;
             if(data.message != null){
-                let message = window.atob(data.message);
-                //console.log(message);
-                let dec = await SEA.decrypt(message,encmsg);
-                //console.log(dec)
+                let dec = data.message;
                 if(dec!=null){
                     chatmessages.push({id:key, text: data.alias + ": " + dec });
                     chatmessages=chatmessages;
-                    //var div = document.createElement("div");
-                    //div.setAttribute("id",key);
-                    ////div.setAttribute("text", data.alias + ": " + dec);
-                    //div.innerHTML = data.alias + ": " + dec;
-                    //publicchatlist.appendChild(div);
-                    /*
-                    $('#publicchatlist').append($('<div/>', { 
-                        id: key,
-                        text : data.alias + ": " + dec
-                    }));
-                    */
                     scrollPublicMessage();
                 }
             }
@@ -107,42 +83,36 @@
         if(gunchat !=null){
             gunchat.off();
         }
-        gunchat = gun.get('chat');
+        gunchat = gun.get('publicchat');
+        console.log("init chat map...");
         //gunchat.get({'.': {'*': '2019/08/'}}).map().once(qcallback);
         //gunchat.get({'.': {'*': timestring}}).map().once(qcallback);
+        //gunchat.get({'.': {'*': timestring},'%': 50000}).map().once(qcallback);
         gunchat.get({'.': {'*': timestring},'%': 50000}).map().once(qcallback);
-        //gunchat.get({'.': {'*': timestring},'%': 50000}).map().on(qcallback);
-        //gunchat.map().on(qcallback);
-        //gunchat.map().once(qcallback);
-        //gunchat.on(qcallback);
+
+
+        //gunchat.map().on((data,key)=>{
+            //console.log("KEY",key);
+        //});
+
     }
 
     async function getchatmessage(){
         //console.log("test");
         console.log(chatmessage);
 
-        let user = gun.user();
-        if(!user.is){ return }//check if user exist
+        //let user = gun.user();
+        //if(!user.is){ return }//check if user exist
         let msg = (chatmessage || '').trim();
         if(!msg) return;//check if not id empty
-        
-        let encmsg = await SEA.work("public","chat");//encrypttion key default?
-        //console.log(encmsg);
-        let enc = await SEA.encrypt(msg,encmsg);
-        //console.log(enc);
-        let who = await user.get('alias').then();
-        //console.log(who);
-        //console.log(typeof enc)
-        enc = window.btoa(enc);
-        
-        //gun.get('chat').set({
-            //alias:who,
-            //message:enc
-        //});
-        gun.get('chat').get(timestamp()).put({
+        let who = "test";
+
+        gun.get('publicchat').get(timestamp()).put({
             alias:who,
-            message:enc
+            //message:enc
+            message:chatmessage
         });
+        
         console.log("send message...");
     }
 

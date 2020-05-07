@@ -13,6 +13,8 @@
     import ChatComponent from "./component/access/chat/ChatComponent.svelte";
     import PublicComponent from "./component/access/chat/PublicChatComponent.svelte";
     import PrivateChatComponent from "./component/access/chat/PrivateChatComponent.svelte";
+
+    import TestChatComponent from "./component/access/chat/TestChatComponent.svelte";
     import ForumComponent from "./component/access/forum/ForumComponent.svelte";
 
 
@@ -23,6 +25,7 @@
     let idcontent = "content-" + generateId();
     let elcontent;
     let accessview = AccountComponent;
+    accessview = TestChatComponent;
     //let accessview=null;
     let blogin = false;
     let bforgot = false;
@@ -41,6 +44,7 @@
         navmenus.push({name:"Messages",context:"context",comp:MessagesComponent});
         navmenus.push({name:"Public Chat",context:"publicchat",comp:PublicComponent});
         navmenus.push({name:"Private Chat",context:"privatechat",comp:PrivateChatComponent});
+        navmenus.push({name:"Test Chat",context:"testchat",comp:TestChatComponent});
         navmenus.push({name:"Forum",context:"forum",comp:ForumComponent});
 
         //navmenus.push({name:"Database",context:"database",comp:DatabaseComponent});
@@ -126,28 +130,32 @@
 </style>
 
 <div id="{idcomponent}" class="mainbody">
-
-        <div id="{idnav}" class="access_navmenu">
-            {#if blogin}
-                {#each navmenus as menu}
-                    <a href="/#" on:click="{()=>h_context(menu.comp)}">{menu.name} </a>
-                {/each}
-            {/if}
-        </div>
+    Hello
+    <div id="{idnav}" class="access_navmenu">
+        {#if blogin}
+            {#each navmenus as menu}
+                <a href="/#" on:click="{()=>h_context(menu.comp)}">{menu.name} </a>
+            {/each}
+        {/if}
+    </div>
+    
+    <div id="{idcontent}" class="">
         
-        <div id="{idcontent}" class="">
-            {#if blogin}
-                {#if accessview !=null}
-                    <svelte:component this={accessview} on:hevent={hevent}/>
-                {/if}
-            {:else}
-                {#if bforgot}
-                    <ForgotComponent on:hevent={h_event}></ForgotComponent>
-                {:else}
-                    Access
-                    <LoginComponent on:hevent={h_event}></LoginComponent>
-                {/if}
+        <!--
+        {#if blogin}
+            {#if accessview !=null}
+                <svelte:component this={accessview} on:hevent={hevent}/>
             {/if}
-        </div>
+        {:else}
+            {#if bforgot}
+                <ForgotComponent on:hevent={h_event}></ForgotComponent>
+            {:else}
+                Access
+                <LoginComponent on:hevent={h_event}></LoginComponent>
+            {/if}
+        {/if}
+        -->
+        <TestChatComponent></TestChatComponent>
 
+    </div>
 </div>

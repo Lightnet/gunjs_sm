@@ -19,3 +19,6 @@ npm run build
  * Forgot passphrase
  * Simple chat
  * Private Message
+
+# Bugs:
+ * Chat feature not working. Broken from gunjs side.

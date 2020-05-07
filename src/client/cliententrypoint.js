@@ -5,33 +5,24 @@
  Information: Work in progres.
  */
 localStorage.clear();
-console.log("init engine...");
+//window.localStorage.clear(); //try this to clear all local storage
+console.log("init app 1...");
 //'use strict';
-//import App from './App.svelte';
 //console.log(`running svelte version ${svelte.VERSION}`);
 //import {utils} from './mjs';
-/*
-import Gun from 'gun/gun';
-import 'gun/lib/then';
-import '../common/gunjstrustsharekeyv2';
-import 'gun/sea';
-*/
+//import Gun from 'gun/gun';
+//import 'gun/lib/then';
+//import '../common/gunjstrustsharekeyv2';
+//import 'gun/sea';
 //require('gun/sea');
-//localStorage.clear();
-//window.localStorage.clear(); //try this to clear all local storage
 //let register_class = utils.register_class;
-
 //app.$on("workspace",(event)=>{
 	//console.log("workspace: " + event.detail);
 //});
-//console.log("main app");
-//export default app;
-
-import {setGun} from './mjs';
 import App from './App.svelte';
-//import App from './component/threejs/ThreejsECSYComponent.svelte';
+import { setGun } from './mjs';
 
-var gun = Gun("http://localhost:8080/gun");
+var gun = Gun({peers:["http://localhost:8080/gun"], localStorage: false});
 setGun(gun);
 
 const app = new App({
@@ -40,3 +31,5 @@ const app = new App({
 		//name: 'MJS'
 	}
 });
+
+//export default app;
